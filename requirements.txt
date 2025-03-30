@@ -1,0 +1,12 @@
+Django>=5.1.5
+Pillow>=10.2.0
+django-crispy-forms>=2.1
+django-allauth>=0.61.1
+django-environ>=0.11.2
+stripe>=8.5.0
+django-taggit>=5.0.1
+django-filter>=24.1
+django-storages>=1.14.2
+psycopg2-binary>=2.9.9
+django-ckeditor>=6.7.1
+django-debug-toolbar>=4.3.0

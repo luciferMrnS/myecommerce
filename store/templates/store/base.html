@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Etsy-Inspired Store{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #F1641E;
+            --secondary-color: #222222;
+            --accent-color: #595959;
+            --background-color: #FFFFFF;
+            --light-gray: #F5F5F5;
+        }
+
+        body {
+            font-family: 'Graphik Webfont', -apple-system, system-ui, Roboto, 'Droid Sans', 'Segoe UI', Helvetica, Arial, sans-serif;
+            color: var(--secondary-color);
+            background-color: var(--background-color);
+        }
+
+        .navbar {
+            background-color: var(--background-color);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .navbar-brand {
+            color: var(--primary-color);
+            font-weight: bold;
+            font-size: 24px;
+        }
+
+        .nav-link {
+            color: var(--secondary-color);
+            font-weight: 500;
+        }
+
+        .search-form {
+            flex-grow: 1;
+            max-width: 600px;
+        }
+
+        .search-input {
+            border-radius: 24px;
+            border: 2px solid var(--light-gray);
+            padding: 8px 16px;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            border-radius: 24px;
+            padding: 8px 20px;
+        }
+
+        .btn-primary:hover {
+            background-color: #E34D0E;
+            border-color: #E34D0E;
+        }
+
+        .product-card {
+            border: none;
+            transition: transform 0.2s;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .product-image {
+            border-radius: 8px;
+            object-fit: cover;
+        }
+
+        .footer {
+            background-color: var(--light-gray);
+            padding: 40px 0;
+            margin-top: 60px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'store:product_list' %}">Store</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <form class="search-form mx-auto d-flex" action="{% url 'store:product_list' %}" method="get">
+                    <input class="form-control search-input" type="search" name="q" placeholder="Search for anything" aria-label="Search">
+                </form>
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'store:category_list' %}">Categories</a>
+                    </li>
+                    {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Account</a>
+                    </li>
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Sign in</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container py-4">
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h5>About Us</h5>
+                    <p>Your one-stop shop for unique and handcrafted items.</p>
+                </div>
+                <div class="col-md-4">
+                    <h5>Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="{% url 'store:product_list' %}">Home</a></li>
+                        <li><a href="{% url 'store:category_list' %}">Categories</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h5>Follow Us</h5>
+                    <div class="social-links">
+                        <a href="#" class="me-3"><i class="fab fa-facebook"></i></a>
+                        <a href="#" class="me-3"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="me-3"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

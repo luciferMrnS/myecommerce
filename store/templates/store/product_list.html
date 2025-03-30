@@ -1,0 +1,128 @@
+{% extends 'store/base.html' %}
+
+{% block title %}Browse Products - Etsy-Inspired Store{% endblock %}
+
+{% block content %}
+<div class="container">
+    {% if featured_products and not request.GET.q %}
+    <section class="featured-products mb-5">
+        <h2 class="mb-4">Featured Products</h2>
+        <div class="row">
+            {% for product in featured_products %}
+            <div class="col-md-3 mb-4">
+                <div class="card product-card h-100">
+                    <img src="{{ product.image.url }}" class="card-img-top product-image" alt="{{ product.name }}" style="height: 200px;">
+                    <div class="card-body">
+                        <h5 class="card-title text-truncate">{{ product.name }}</h5>
+                        <p class="card-text text-muted mb-1">${{ product.price }}</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <a href="{% url 'store:product_detail' product.slug %}" class="btn btn-sm btn-outline-primary">View Details</a>
+                            <small class="text-muted">{{ product.category.name }}</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+    {% endif %}
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="mb-0">{% if request.GET.q %}Search Results{% else %}All Products{% endif %}</h2>
+        <div class="dropdown">
+            <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="sortDropdown" data-bs-toggle="dropdown">
+                Sort by
+            </button>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="?sort=newest">Newest</a></li>
+                <li><a class="dropdown-item" href="?sort=price_low">Price: Low to High</a></li>
+                <li><a class="dropdown-item" href="?sort=price_high">Price: High to Low</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-3">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">Categories</h5>
+                    <div class="list-group list-group-flush">
+                        {% for category in categories %}
+                        <a href="{% url 'store:product_list' %}?category={{ category.slug }}" 
+                           class="list-group-item list-group-item-action {% if category.slug == request.GET.category %}active{% endif %}">
+                            {{ category.name }}
+                        </a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Price Range</h5>
+                    <form method="get">
+                        <div class="mb-3">
+                            <label class="form-label">Min Price</label>
+                            <input type="number" name="min_price" class="form-control" value="{{ request.GET.min_price }}">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Max Price</label>
+                            <input type="number" name="max_price" class="form-control" value="{{ request.GET.max_price }}">
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Apply Filter</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-9">
+            <div class="row">
+                {% for product in products %}
+                <div class="col-md-4 mb-4">
+                    <div class="card product-card h-100">
+                        <img src="{{ product.image.url }}" class="card-img-top product-image" alt="{{ product.name }}" style="height: 200px;">
+                        <div class="card-body">
+                            <h5 class="card-title text-truncate">{{ product.name }}</h5>
+                            <p class="card-text text-muted mb-1">${{ product.price }}</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <a href="{% url 'store:product_detail' product.slug %}" class="btn btn-sm btn-outline-primary">View Details</a>
+                                <small class="text-muted">{{ product.category.name }}</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="col-12 text-center py-5">
+                    <h3>No products found</h3>
+                    <p class="text-muted">Try adjusting your search or filter criteria</p>
+                </div>
+                {% endfor %}
+            </div>
+
+            {% if is_paginated %}
+            <nav aria-label="Page navigation" class="mt-4">
+                <ul class="pagination justify-content-center">
+                    {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}">&laquo; Previous</a>
+                    </li>
+                    {% endif %}
+
+                    {% for num in page_obj.paginator.page_range %}
+                    <li class="page-item {% if num == page_obj.number %}active{% endif %}">
+                        <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                    </li>
+                    {% endfor %}
+
+                    {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next &raquo;</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
